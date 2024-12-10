@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "145856781276",
+    "project_id": "appsh-44b4a",
+    "storage_bucket": "appsh-44b4a.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:145856781276:android:38d10f4de5a0580fa60d19",
+        "android_client_info": {
+          "package_name": "com.example.appsh"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqlMKqqMq5hamZWLrV3WaMrjxlZHOMGOk"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
