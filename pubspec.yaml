@@ -34,7 +34,9 @@ dependencies:
   firebase_auth: ^5.3.4 
   firebase_storage: ^12.3.7
   cloud_firestore: ^5.5.1
-
+  curved_navigation_bar: ^1.0.6
+  image_picker: ^1.1.2
+  provider: ^6.1.2
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -58,9 +60,19 @@ dev_dependencies:
 flutter:
 
  assets:
-    - lib/icones/cerebro.png
+    - lib/assets/icons/cerebro.png
     - lib/assets/tbt.png
-
+    - lib/assets/icons/calmo.png
+    - lib/assets/icons/devastado.png
+    - lib/assets/icons/feliz.png
+    - lib/assets/icons/felizao.png
+    - lib/assets/icons/felizin.png
+    - lib/assets/icons/feminino.png
+    - lib/assets/icons/masculino.png
+    - lib/assets/icons/neutro.png
+    - lib/assets/icons/preocupado.png
+    - lib/assets/icons/raiva.png
+    - lib/assets/icons/tristao.png
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in
