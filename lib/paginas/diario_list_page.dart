@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shared_preferences/shared_preferences.dart';  // Importação correta do pacote
 import 'diario_form_page.dart';
 
 class DiarioListPage extends StatefulWidget {
@@ -19,12 +19,13 @@ class _DiarioListPageState extends State<DiarioListPage> {
     _loadData(); 
   }
 
+  // Corrigido para usar SharedPreferences corretamente
   void _loadData() async {
-    final prefs = await SharedPreferences.getInstance();
+    final prefs = await SharedPreferences.getInstance(); // Use SharedPreferences.getInstance()
     Map<String, String> newAnotacoes = {};
 
     for (var dia in dias) {
-      String? savedHumor = prefs.getString('humor_$dia');
+      String? savedHumor = prefs.getString('humor_$dia'); // Obtendo o valor corretamente
       newAnotacoes[dia] = savedHumor ?? 'Sem anotações';
     }
 
@@ -138,8 +139,7 @@ class _DiarioListPageState extends State<DiarioListPage> {
                       onPressed: () => _removerRegistro(dia),
                     ),
                     onTap: () async {
-                      final bool? updated = await Navigator.push<bool>(
-                        context,
+                      final bool? updated = await Navigator.push<bool>(context,
                         MaterialPageRoute(
                           builder: (context) => DiarioFormPage(
                             dia: dia,

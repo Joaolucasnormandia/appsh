@@ -1,6 +1,6 @@
+import 'package:appsh/main.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:trabalho_final/main.dart';
 
 class ConfigPage extends StatelessWidget {
   const ConfigPage({Key? key}) : super(key: key);

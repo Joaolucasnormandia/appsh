@@ -1,5 +1,5 @@
 import 'dart:io';
-import 'package:trabalho_final/paginas/config.dart';
+import 'package:appsh/paginas/config.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 

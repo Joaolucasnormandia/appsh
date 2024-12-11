@@ -1,7 +1,7 @@
+import 'package:appsh/paginas/corpo.dart';
+import 'package:appsh/paginas/mente.dart';
+import 'package:appsh/paginas/perfil.dart';
 import 'package:curved_navigation_bar/curved_navigation_bar.dart';
-import 'package:trabalho_final/paginas/corpo.dart';
-import 'package:trabalho_final/paginas/mente.dart';
-import 'package:trabalho_final/paginas/perfil.dart';
 import 'package:flutter/material.dart';
 
 class Navegation extends StatefulWidget {

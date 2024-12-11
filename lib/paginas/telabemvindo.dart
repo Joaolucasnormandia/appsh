@@ -1,4 +1,4 @@
-import 'package:appsh/paginas/login/telalolgin.dart';
+import 'package:appsh/paginas/login/telalogin.dart';
 import 'package:flutter/material.dart';
 
 class TelaInicial extends StatelessWidget {

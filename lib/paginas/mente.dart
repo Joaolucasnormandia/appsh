@@ -1,5 +1,5 @@
+import 'package:appsh/paginas/emoji.dart';
 import 'package:flutter/material.dart';
-import 'package:trabalho_final/paginas/emoji.dart';
 
 class Mente extends StatefulWidget {
   const Mente({super.key});

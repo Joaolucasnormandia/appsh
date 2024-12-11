@@ -10,7 +10,6 @@ class Emoji extends StatefulWidget {
 class _EmojiState extends State<Emoji> {
   @override
   Widget build(BuildContext context) {
-    // Mapeamento de emojis com seus caminhos de arquivos
     final Map<String, String> emojis = {
       'Calmo': 'lib/icones/calmo.png',
       'Devastado': 'lib/icones/capitalismo.png',
