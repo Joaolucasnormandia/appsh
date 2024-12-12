@@ -11,20 +11,20 @@ class _EmojiState extends State<Emoji> {
   @override
   Widget build(BuildContext context) {
     final Map<String, String> emojis = {
-      'Calmo': 'lib/icones/calmo.png',
-      'Devastado': 'lib/icones/capitalismo.png',
-      'Feliz': 'lib/icones/feliz.png',
-      'Muito feliz': 'lib/icones/felizao.png',
-      'Um pouco feliz': 'lib/icones/felizin.png',
-      'Neutro': 'lib/icones/neutro.png',
-      'Preocupado': 'lib/icones/preocupado.png',
-      'Chateado': 'lib/icones/raiva.png',
-      'Triste': 'lib/icones/tristao.png',
+      'Calmo': 'assets/icons/calmo.png',
+      'Devastado': 'assets/icons/capitalismo.png',
+      'Feliz': 'assets/icons/feliz.png',
+      'Muito feliz': 'assets/icons/felizao.png',
+      'Um pouco feliz': 'assets/icons/felizin.png',
+      'Neutro': 'assets/icons/neutro.png',
+      'Preocupado': 'assets/icons/preocupado.png',
+      'Chateado': 'assets/icons/raiva.png',
+      'Triste': 'assets/icons/tristao.png',
     };
 
     return Scaffold(
       appBar: AppBar(
-        title: Text("Selecione um Emoji"),
+        title: const Text("Selecione um Emoji"),
         centerTitle: true,
         elevation: 1,
         backgroundColor: Theme.of(context).colorScheme.background,
@@ -34,25 +34,22 @@ class _EmojiState extends State<Emoji> {
         padding: const EdgeInsets.all(16.0),
         child: GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 3, // Número de colunas
+            crossAxisCount: 3, 
             crossAxisSpacing: 10,
             mainAxisSpacing: 10,
           ),
           itemCount: emojis.length,
           itemBuilder: (context, index) {
-            // Obtém o nome e caminho do emoji
             String key = emojis.keys.elementAt(index);
             String path = emojis[key]!;
-
             return GestureDetector(
               onTap: () {
-                // Retorna o emoji selecionado ao voltar para a página anterior
                 Navigator.pop(context, path);
               },
               child: ColorFiltered(
                 colorFilter: ColorFilter.mode(
-                  Theme.of(context).colorScheme.primary, // Aplica a cor preta
-                  BlendMode.srcIn, // Substitui a cor original
+                  Theme.of(context).colorScheme.primary, 
+                  BlendMode.srcIn, 
                 ),
                 child: Column(
                   children: [

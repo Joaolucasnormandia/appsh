@@ -9,21 +9,21 @@ class IMCApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       title: 'Calculadora de IMC',
-      debugShowCheckedModeBanner: false, // Remove o debug banner
+      debugShowCheckedModeBanner: false, 
       theme: ThemeData(
         primarySwatch: Colors.teal,
       ),
-      home: TelaInicial(),
+      home: TelaIMC(),
     );
   }
 }
 
-class TelaInicial extends StatefulWidget {
+class TelaIMC extends StatefulWidget {
   @override
-  _TelaInicialState createState() => _TelaInicialState();
+  _TelaIMCState createState() => _TelaIMCState();
 }
 
-class _TelaInicialState extends State<TelaInicial> {
+class _TelaIMCState extends State<TelaIMC> {
   final _formKey = GlobalKey<FormState>();
   final _pesoController = TextEditingController();
   final _alturaController = TextEditingController();
@@ -83,7 +83,7 @@ class _TelaInicialState extends State<TelaInicial> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   'Informe seus dados:',
                   style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
                 ),
@@ -108,7 +108,7 @@ class _TelaInicialState extends State<TelaInicial> {
                     return null;
                   },
                 ),
-                SizedBox(height: 20),
+                const SizedBox(height: 20),
                 TextFormField(
                   controller: _alturaController,
                   keyboardType: TextInputType.number,
@@ -203,8 +203,8 @@ class TelaResultado extends StatelessWidget {
                 ),
                 textAlign: TextAlign.center,
               ),
-              SizedBox(height: 30),
-              Text(
+              const SizedBox(height: 30),
+              const Text(
                 '⚠️ Este cálculo não substitui uma consulta médica.',
                 style: TextStyle(fontSize: 16, color: Colors.grey),
                 textAlign: TextAlign.center,
@@ -214,7 +214,7 @@ class TelaResultado extends StatelessWidget {
                 onPressed: () {
                   Navigator.pop(context);
                 },
-                child: Text(
+                child: const Text(
                   'Atualizar',
                   style: TextStyle(fontSize: 18),
                 ),

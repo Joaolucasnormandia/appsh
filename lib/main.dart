@@ -1,4 +1,4 @@
-import 'package:appsh/paginas/login/telalogin.dart';
+import 'package:appsh/paginas/WelcomeScreen.dart';
 import 'package:appsh/paginas/tema.dart/tema.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -31,7 +31,7 @@ class MyApp extends StatelessWidget {
 
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      home: TelaLogin(),
+      home: WelcomeScreen(),
       theme: modoClaro,
       darkTheme: modoEscuro,
       themeMode: themeProvider.themeMode, 

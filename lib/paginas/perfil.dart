@@ -5,8 +5,7 @@ import 'package:image_picker/image_picker.dart';
 
 class Perfil extends StatefulWidget {
   const Perfil({super.key});
-  
-  
+
   @override
   State<Perfil> createState() => _PerfilState();
 }
@@ -14,8 +13,6 @@ class Perfil extends StatefulWidget {
 class _PerfilState extends State<Perfil> {
   final image_piker = ImagePicker();
   File? image_file;
-
-
 
   pick(ImageSource source) async {
     final pickedFile = await image_piker.pickImage(source: source);
@@ -40,17 +37,18 @@ class _PerfilState extends State<Perfil> {
           ),
         ),
         centerTitle: true,
-          actions: [
-  IconButton(
-    onPressed: () {
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => const ConfigPage()),
-        );
-      },
-      icon: Icon(Icons.settings, color: Theme.of(context).colorScheme.primary),
-      )
-      ],
+        automaticallyImplyLeading: false, 
+        actions: [
+          IconButton(
+            onPressed: () {
+              Navigator.push(
+                context,
+                MaterialPageRoute(builder: (context) => const ConfigPage()),
+              );
+            },
+            icon: Icon(Icons.settings, color: Theme.of(context).colorScheme.primary),
+          ),
+        ],
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: ListView(
@@ -81,9 +79,9 @@ class _PerfilState extends State<Perfil> {
                           backgroundColor: const Color(0xFF8F5FBF),
                           child: IconButton(
                             onPressed: _showOpcoesBottomSheet,
-                            icon: Icon(
+                            icon: const Icon(
                               Icons.edit,
-                              color: const Color(0xFFFDF6E3),
+                              color: Color(0xFFFDF6E3),
                             ),
                           ),
                         ),
@@ -92,14 +90,14 @@ class _PerfilState extends State<Perfil> {
                   ),
                 ],
               ),
-              SizedBox(height: 10),
-              Center(
+              const SizedBox(height: 10),
+              const Center(
                 child: Text(
                   "Placeholder",
                   style: TextStyle(
                     fontSize: 23,
                     fontWeight: FontWeight.w500,
-                    color: const Color(0xFFFDF6E3),
+                    color: Color(0xFFFDF6E3),
                   ),
                 ),
               ),
@@ -147,18 +145,18 @@ class _PerfilState extends State<Perfil> {
             mainAxisSize: MainAxisSize.min,
             children: [
               ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: const Color(0xFF9FD3C7),
+                leading: const CircleAvatar(
+                  backgroundColor: Color(0xFF9FD3C7),
                   child: Center(
                     child: Icon(
                       Icons.photo,
-                      color: const Color(0xFF1E2952),
+                      color: Color(0xFF1E2952),
                     ),
                   ),
                 ),
-                title: Text(
+                title: const Text(
                   'Galeria',
-                  style: TextStyle(color: const Color(0xFF1E2952)),
+                  style: TextStyle(color: Color(0xFF1E2952)),
                 ),
                 onTap: () {
                   Navigator.of(context).pop();
@@ -166,12 +164,12 @@ class _PerfilState extends State<Perfil> {
                 },
               ),
               ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: const Color(0xFFFF7A59),
+                leading: const CircleAvatar(
+                  backgroundColor: Color(0xFFFF7A59),
                   child: Center(
                     child: Icon(
                       Icons.camera_alt,
-                      color: const Color(0xFFFDF6E3),
+                      color: Color(0xFFFDF6E3),
                     ),
                   ),
                 ),
@@ -185,18 +183,18 @@ class _PerfilState extends State<Perfil> {
                 },
               ),
               ListTile(
-                leading: CircleAvatar(
-                  backgroundColor: const Color(0xFF8F5FBF),
+                leading: const CircleAvatar(
+                  backgroundColor: Color(0xFF8F5FBF),
                   child: Center(
                     child: Icon(
                       Icons.delete,
-                      color: const Color(0xFFFDF6E3),
+                      color: Color(0xFFFDF6E3),
                     ),
                   ),
                 ),
-                title: Text(
+                title: const Text(
                   'Remover',
-                  style: TextStyle(color: const Color(0xFF1E2952)),
+                  style: TextStyle(color: Color(0xFF1E2952)),
                 ),
                 onTap: () {
                   Navigator.of(context).pop();

@@ -60,19 +60,9 @@ dev_dependencies:
 # The following section is specific to Flutter packages.
 flutter:
   assets:
-    - assets/icons/cerebro.png
-    - assets/tbt.png
-    - assets/icons/calmo.png
-    - assets/icons/devastado.png
-    - assets/icons/feliz.png
-    - assets/icons/felizao.png
-    - assets/icons/felizin.png
-    - assets/icons/femenino.png
-    - assets/icons/masculino.png
-    - assets/icons/neutro.png
-    - assets/icons/preocupado.png
-    - assets/icons/raiva.png
-    - assets/icons/tristao.png
+    - assets/icons/
+    - assets/
+    
 
   # The following line ensures that the Material Icons font is
   # included with your application, so that you can use the icons in

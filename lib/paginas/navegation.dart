@@ -40,25 +40,24 @@ class _NavegationState extends State<Navegation> {
         onTap: _NavigationBarCurved, 
         index: _pag_selecionada, 
         items: [
-          // mente
           Container(
             color: Colors.black,
             child: Image.asset(
-              'lib/icones/cerebro.png',
+              'assets/icons/cerebro.png',
               color: const Color.fromARGB(255, 255, 245, 233),
             ),
             height: 30,
           ),
           // Perfil
-          Icon(
+          const Icon(
             Icons.person,
-            color: const Color.fromARGB(255, 255, 245, 233),
+            color: Color.fromARGB(255, 255, 245, 233),
             size: 30,
           ),
           // corpo
-          Icon(
+          const Icon(
             Icons.fitness_center,
-            color: const Color.fromARGB(255, 255, 245, 233),
+            color: Color.fromARGB(255, 255, 245, 233),
             size: 30,
           ),
         ],

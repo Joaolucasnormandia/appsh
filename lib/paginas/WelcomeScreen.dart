@@ -1,23 +1,5 @@
+import 'package:appsh/paginas/login/telalogin.dart';
 import 'package:flutter/material.dart';
-
-void main() {
-  runApp(MyApp());
-}
-
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Diário de Saúde',
-      initialRoute: '/',
-      routes: {
-        '/': (context) => WelcomeScreen(),
-        
-      },
-    );
-  }
-}
 
 class WelcomeScreen extends StatelessWidget {
   @override
@@ -46,7 +28,7 @@ class WelcomeScreen extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [
               Image.asset(
-                'lib/assets/tbt.png',
+                'assets/tbt.png',
                 height: 300,
               ),
               SizedBox(height: 30),
@@ -100,7 +82,10 @@ class WelcomeScreen extends StatelessWidget {
               Spacer(),
               ElevatedButton(
                 onPressed: () {
-                  Navigator.pushNamed(context, '/home');
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => TelaLogin()),
+                  );
                 },
                 style: ElevatedButton.styleFrom(
                   backgroundColor: Colors.teal,
@@ -117,4 +102,4 @@ class WelcomeScreen extends StatelessWidget {
   }
 }
 
- 
+

@@ -1,5 +1,5 @@
 import 'package:appsh/paginas/login/telaregistro.dart';
-import 'package:appsh/paginas/telainicial.dart';
+import 'package:appsh/paginas/navegation.dart';
 import 'package:flutter/material.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 
@@ -34,16 +34,18 @@ class _TelaLoginState extends State<TelaLogin> {
       if (!userCredential.user!.emailVerified) {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Verifique seu e-mail.')),
+
         );
 
         await _checkEmailVerified(userCredential.user!);
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           const SnackBar(content: Text('Login realizado com sucesso!')),
+
         );
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => Navegation()),
         );
       }
     } on FirebaseAuthException catch (e) {
@@ -87,7 +89,7 @@ class _TelaLoginState extends State<TelaLogin> {
         );
         Navigator.pushReplacement(
           context,
-          MaterialPageRoute(builder: (context) => HomePage()),
+          MaterialPageRoute(builder: (context) => Navegation()),
         );
       }
     }
@@ -109,18 +111,42 @@ class _TelaLoginState extends State<TelaLogin> {
           children: [
             TextField(
               controller: _emailController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.email, color: Colors.teal),
                 labelText: 'E-mail',
-                border: OutlineInputBorder(),
+                labelStyle: const TextStyle(color: Colors.teal),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.teal, width: 2.0),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.grey, width: 1.5),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
               keyboardType: TextInputType.emailAddress,
             ),
             const SizedBox(height: 16),
             TextField(
               controller: _senhaController,
-              decoration: const InputDecoration(
+              decoration: InputDecoration(
+                prefixIcon: const Icon(Icons.lock, color: Colors.teal),
                 labelText: 'Senha',
-                border: OutlineInputBorder(),
+                labelStyle: const TextStyle(color: Colors.teal),
+                focusedBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.teal, width: 2.0),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                enabledBorder: OutlineInputBorder(
+                  borderSide: const BorderSide(color: Colors.grey, width: 1.5),
+                  borderRadius: BorderRadius.circular(12),
+                ),
+                border: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(12),
+                ),
               ),
               obscureText: true,
             ),
@@ -129,8 +155,9 @@ class _TelaLoginState extends State<TelaLogin> {
               onPressed: _login,
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.teal,
-                padding: const EdgeInsets.symmetric(
-                  vertical: 14,
+                padding: const EdgeInsets.symmetric(vertical: 14),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(12),
                 ),
               ),
               child: const Text(
