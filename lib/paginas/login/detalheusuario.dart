@@ -12,7 +12,7 @@ class DetalheCadastroScreen extends StatefulWidget {
 }
 
 class _DetalheCadastroScreenState extends State<DetalheCadastroScreen> {
-  final TextEditingController _apelidoController = TextEditingController(); // Usando controlador para apelido
+  final TextEditingController _apelidoController = TextEditingController(); 
   bool _isLoading = false;
   int _currentStep = 0;
   List<String> _sexos = ['Masculino', 'Feminino'];
@@ -37,19 +37,15 @@ class _DetalheCadastroScreenState extends State<DetalheCadastroScreen> {
     });
 
     try {
-      // Depuração para garantir que o apelido está correto
       print("Salvando apelido: ${_apelidoController.text}");
 
       await FirebaseFirestore.instance.collection('users').doc(widget.uid).set({
-        'apelido': _apelidoController.text, // Salvando apelido no Firestore
+        'apelido': _apelidoController.text, 
       }, SetOptions(merge: true));
-
-      // Confirmar que o apelido foi salvo com sucesso
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Apelido salvo com sucesso!')),
       );
     } catch (e) {
-      // Em caso de erro, exibir mensagem e logar o erro
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Erro ao salvar o apelido.')),
       );
@@ -141,7 +137,6 @@ class _DetalheCadastroScreenState extends State<DetalheCadastroScreen> {
 
   void _nextStep() {
     if (_currentStep == 0) {
-      // Salvar apelido quando avançar para a próxima etapa
       _saveApelido();
     }
 
@@ -183,7 +178,7 @@ class _DetalheCadastroScreenState extends State<DetalheCadastroScreen> {
                   Step(
                     title: Text('Apelido'),
                     content: TextFormField(
-                      controller: _apelidoController, // Usando o controlador para apelido
+                      controller: _apelidoController, 
                       decoration: InputDecoration(
                         labelText: 'Apelido',
                         border: OutlineInputBorder(
