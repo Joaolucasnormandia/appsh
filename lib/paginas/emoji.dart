@@ -12,7 +12,7 @@ class _EmojiState extends State<Emoji> {
   Widget build(BuildContext context) {
     final Map<String, String> emojis = {
       'Calmo': 'assets/icons/calmo.png',
-      'Devastado': 'assets/icons/capitalismo.png',
+      'Devastado': 'assets/icons/devastado.png',
       'Feliz': 'assets/icons/feliz.png',
       'Muito feliz': 'assets/icons/felizao.png',
       'Um pouco feliz': 'assets/icons/felizin.png',
