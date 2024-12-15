@@ -12,8 +12,6 @@ class Lista_Tarefa {
   }) : creationTime = DateTime.now();
 }
 
-void main() => runApp(MyApp());
-
 class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
@@ -155,8 +153,8 @@ class _Minhas_TarefasState extends State<Minhas_Tarefas> {
               ElevatedButton(
                 onPressed: _adicionarTarefa,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal, // Cor do fundo do botão
-                  textStyle: TextStyle(fontSize: 16), // Estilo do texto
+                  backgroundColor: Colors.teal,
+                  textStyle: TextStyle(fontSize: 16),
                 ),
                 child: Text('Adicionar Tarefa'),
               ),

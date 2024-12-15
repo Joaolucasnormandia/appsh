@@ -18,8 +18,6 @@ class _DiarioListPageState extends State<DiarioListPage> {
     diasFiltrados = dias; 
     _loadData(); 
   }
-
-  // Corrigido para usar SharedPreferences corretamente
   void _loadData() async {
     final prefs = await SharedPreferences.getInstance(); // Use SharedPreferences.getInstance()
     Map<String, String> newAnotacoes = {};

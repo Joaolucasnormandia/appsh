@@ -19,7 +19,6 @@ class _ListarAlimentosScreenState extends State<ListarAlimentosScreen> {
     _carregarCaloriasTotais();
   }
 
-  // Carregar calorias totais do dia
   Future<void> _carregarCaloriasTotais() async {
     final user = FirebaseAuth.instance.currentUser;
     if (user == null) {
@@ -28,7 +27,8 @@ class _ListarAlimentosScreenState extends State<ListarAlimentosScreen> {
 
     final userId = user.uid;
     final dataAtual = DateTime.now();
-    final dataInicioDia = DateTime(dataAtual.year, dataAtual.month, dataAtual.day);
+    final dataInicioDia =
+        DateTime(dataAtual.year, dataAtual.month, dataAtual.day);
 
     try {
       final snapshot = await FirebaseFirestore.instance
@@ -96,11 +96,15 @@ class _ListarAlimentosScreenState extends State<ListarAlimentosScreen> {
                 child: ListView.builder(
                   itemCount: alimentos.length,
                   itemBuilder: (context, index) {
-                    final alimento = alimentos[index].data() as Map<String, dynamic>;
+                    final alimento =
+                        alimentos[index].data() as Map<String, dynamic>;
                     final uid = alimentos[index].id;
                     final nome = alimento['nome'] ?? 'Sem Nome';
-                    final calorias = alimento['calorias'] != null ? alimento['calorias'].toDouble() : 0;
-                    final imagemUrl = alimento['imagemUrl'] ?? 'https://via.placeholder.com/150';
+                    final calorias = alimento['calorias'] != null
+                        ? alimento['calorias'].toDouble()
+                        : 0;
+                    final imagemUrl = alimento['imagemUrl'] ??
+                        'https://via.placeholder.com/150';
 
                     return ListTile(
                       leading: CircleAvatar(
@@ -145,20 +149,15 @@ class _ListarAlimentosScreenState extends State<ListarAlimentosScreen> {
     final dataAtual = DateTime.now();
 
     try {
-      // Adiciona o consumo no Firestore
       await FirebaseFirestore.instance.collection('consumos').add({
         'uid_usuario': userId,
         'uid_alimento': uidAlimento,
         'data_consumo': dataAtual,
         'calorias': calorias,
       });
-
-      // Atualiza o total de calorias
       setState(() {
         caloriasTotais += calorias;
       });
-
-      // Exibe um pop-up de sucesso
       showDialog(
         context: context,
         barrierDismissible: false,
@@ -182,10 +181,8 @@ class _ListarAlimentosScreenState extends State<ListarAlimentosScreen> {
           );
         },
       );
-
-      // Fecha o pop-up após 2 segundos
       await Future.delayed(const Duration(seconds: 2));
-      Navigator.pop(context);  // Fecha o pop-up
+      Navigator.pop(context);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Erro ao adicionar consumo: $e')),

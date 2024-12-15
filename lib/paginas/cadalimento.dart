@@ -3,8 +3,7 @@ import 'package:flutter/material.dart';
 
 class CadastroAlimentoScreen extends StatefulWidget {
   @override
-  _CadastroAlimentoScreenState createState() =>
-      _CadastroAlimentoScreenState();
+  _CadastroAlimentoScreenState createState() => _CadastroAlimentoScreenState();
 }
 
 class _CadastroAlimentoScreenState extends State<CadastroAlimentoScreen> {
@@ -48,9 +47,12 @@ class _CadastroAlimentoScreenState extends State<CadastroAlimentoScreen> {
     });
 
     try {
-      String uidAlimento = DateTime.now().millisecondsSinceEpoch.toString(); // Gerando UID único baseado no timestamp
+      String uidAlimento = DateTime.now().millisecondsSinceEpoch.toString();
 
-      await FirebaseFirestore.instance.collection('foods').doc(uidAlimento).set({
+      await FirebaseFirestore.instance
+          .collection('foods')
+          .doc(uidAlimento)
+          .set({
         'uid': uidAlimento,
         'nome': nome,
         'calorias': calorias,
@@ -69,8 +71,6 @@ class _CadastroAlimentoScreenState extends State<CadastroAlimentoScreen> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Alimento cadastrado com sucesso!')),
       );
-
-      // Limpar os campos após o cadastro
       _nomeController.clear();
       _caloriasController.clear();
       _proteinaController.clear();

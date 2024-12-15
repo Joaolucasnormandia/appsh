@@ -12,7 +12,7 @@ class Navegation extends StatefulWidget {
 }
 
 class _NavegationState extends State<Navegation> {
-  int _pag_selecionada = 1; 
+  int _pag_selecionada = 1;
 
   void _NavigationBarCurved(int index) {
     setState(() {
@@ -32,13 +32,13 @@ class _NavegationState extends State<Navegation> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _paginas[_pag_selecionada], 
+      body: _paginas[_pag_selecionada],
       backgroundColor: Theme.of(context).colorScheme.background,
       bottomNavigationBar: CurvedNavigationBar(
-        backgroundColor:  Theme.of(context).colorScheme.background,
+        backgroundColor: Theme.of(context).colorScheme.background,
         color: Colors.black,
-        onTap: _NavigationBarCurved, 
-        index: _pag_selecionada, 
+        onTap: _NavigationBarCurved,
+        index: _pag_selecionada,
         items: [
           Container(
             color: Colors.black,

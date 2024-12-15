@@ -1,4 +1,3 @@
-
 import 'package:appsh/paginas/WelcomeScreen.dart';
 import 'package:appsh/paginas/tema.dart/tema.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
@@ -8,12 +7,11 @@ import 'package:provider/provider.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 void main() async {
-
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();  
-  
+  await Firebase.initializeApp();
+
   final themeProvider = ThemeProvider();
-  await themeProvider.loadTheme();  
+  await themeProvider.loadTheme();
 
   runApp(
     ChangeNotifierProvider(
@@ -35,7 +33,7 @@ class MyApp extends StatelessWidget {
       home: WelcomeScreen(),
       theme: modoClaro,
       darkTheme: modoEscuro,
-      themeMode: themeProvider.themeMode, 
+      themeMode: themeProvider.themeMode,
     );
   }
 }
@@ -45,14 +43,12 @@ class ThemeProvider extends ChangeNotifier {
 
   ThemeMode get themeMode => _themeMode;
 
-
   Future<void> loadTheme() async {
     final prefs = await SharedPreferences.getInstance();
-    final isDark = prefs.getBool('isDark') ?? false; 
+    final isDark = prefs.getBool('isDark') ?? false;
     _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
     notifyListeners();
   }
-
 
   Future<void> toggleTheme(bool isDark) async {
     _themeMode = isDark ? ThemeMode.dark : ThemeMode.light;
@@ -77,7 +73,8 @@ class FirestoreService {
 
   Future<Map<String, dynamic>?> getData(String userId) async {
     try {
-      DocumentSnapshot snapshot = await _db.collection('users').doc(userId).get();
+      DocumentSnapshot snapshot =
+          await _db.collection('users').doc(userId).get();
       if (snapshot.exists) {
         return snapshot.data() as Map<String, dynamic>;
       } else {
