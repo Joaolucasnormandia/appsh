@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'dart:async';
 
 class Lista_Tarefa {
@@ -10,16 +12,21 @@ class Lista_Tarefa {
     required this.tarefa,
     this.concluida = false,
   }) : creationTime = DateTime.now();
-}
 
-class MyApp extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'Lista de Afazeres',
-      theme: ThemeData(primarySwatch: Colors.blue),
-      home: Minhas_Tarefas(),
+  // Converte a tarefa para um mapa para salvar no Firestore
+  Map<String, dynamic> toMap() {
+    return {
+      'tarefa': tarefa,
+      'concluida': concluida,
+      'creationTime': creationTime,
+    };
+  }
+
+  // Converte um documento Firestore para Lista_Tarefa
+  factory Lista_Tarefa.fromMap(Map<String, dynamic> map) {
+    return Lista_Tarefa(
+      tarefa: map['tarefa'] ?? '',
+      concluida: map['concluida'] ?? false,
     );
   }
 }
@@ -30,61 +37,177 @@ class Minhas_Tarefas extends StatefulWidget {
 }
 
 class _Minhas_TarefasState extends State<Minhas_Tarefas> {
-  final List<Lista_Tarefa> _toDoList = [];
   final TextEditingController _controller = TextEditingController();
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+  List<Lista_Tarefa> _toDoList = [];
+
+  String? userId;
 
   @override
   void initState() {
     super.initState();
-    Timer.periodic(Duration(seconds: 1), (timer) {
-      if (mounted) {
-        setState(() {});
-      }
+    _getUserId();
+    _loadTarefas();
+  }
+
+  Future<void> _getUserId() async {
+    final User? user = _auth.currentUser;
+    if (user != null) {
+      setState(() {
+        userId = user.uid;
+      });
+    } else {
+      print('Usuário não autenticado.');
+    }
+  }
+
+  // Carregar tarefas do Firestore
+  Future<void> _loadTarefas() async {
+    if (userId == null) return;
+
+    final snapshot = await _firestore
+        .collection('tarefas')
+        .doc(userId)
+        .collection('minhas_tarefas')
+        .orderBy('creationTime', descending: true)
+        .get();
+
+    setState(() {
+      _toDoList = snapshot.docs
+          .map((doc) => Lista_Tarefa.fromMap(doc.data()))
+          .toList();
     });
   }
 
-  void _adicionarTarefa() {
-    if (_controller.text.isEmpty) return;
+  // Salvar tarefa no Firestore
+  Future<void> _adicionarTarefa() async {
+    if (_controller.text.isEmpty || userId == null) return;
+
+    final tarefa = Lista_Tarefa(tarefa: _controller.text.trim());
+
+    // Adicionar a tarefa no Firestore
+    await _firestore
+        .collection('tarefas')
+        .doc(userId)
+        .collection('minhas_tarefas')
+        .add(tarefa.toMap());
 
     setState(() {
-      final tarefa = Lista_Tarefa(tarefa: _controller.text.trim());
       _toDoList.add(tarefa);
     });
 
     _controller.clear();
   }
 
-  void _alternarConclusaoTarefa(int indice) {
+  // Alternar conclusão da tarefa
+  Future<void> _alternarConclusaoTarefa(int indice) async {
+    final tarefa = _toDoList[indice];
+    tarefa.concluida = !tarefa.concluida;
+
+    // Atualizar a tarefa no Firestore
+    final querySnapshot = await _firestore
+        .collection('tarefas')
+        .doc(userId)
+        .collection('minhas_tarefas')
+        .where('tarefa', isEqualTo: tarefa.tarefa)
+        .limit(1)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      final docId = querySnapshot.docs[0].id;
+      await _firestore
+          .collection('tarefas')
+          .doc(userId)
+          .collection('minhas_tarefas')
+          .doc(docId)
+          .update({'concluida': tarefa.concluida});
+    }
+
     setState(() {
-      _toDoList[indice].concluida = !_toDoList[indice].concluida;
+      _toDoList[indice] = tarefa;
     });
   }
 
-  void _removerTarefa(int indice) {
+  // Remover tarefa
+  Future<void> _removerTarefa(int indice) async {
+    final tarefa = _toDoList[indice];
+
+    // Remover a tarefa do Firestore
+    final querySnapshot = await _firestore
+        .collection('tarefas')
+        .doc(userId)
+        .collection('minhas_tarefas')
+        .where('tarefa', isEqualTo: tarefa.tarefa)
+        .limit(1)
+        .get();
+
+    if (querySnapshot.docs.isNotEmpty) {
+      final docId = querySnapshot.docs[0].id;
+      await _firestore
+          .collection('tarefas')
+          .doc(userId)
+          .collection('minhas_tarefas')
+          .doc(docId)
+          .delete();
+    }
+
     setState(() {
       _toDoList.removeAt(indice);
     });
   }
 
-  void _limparTodasTarefas() {
+  // Limpar todas as tarefas
+  Future<void> _limparTodasTarefas() async {
+    if (userId == null) return;
+
+    // Limpar todas as tarefas do Firestore
+    final snapshot = await _firestore
+        .collection('tarefas')
+        .doc(userId)
+        .collection('minhas_tarefas')
+        .get();
+
+    for (var doc in snapshot.docs) {
+      await doc.reference.delete();
+    }
+
     setState(() {
       _toDoList.clear();
     });
   }
 
-  void _marcarTodasComoConcluidas() {
-    setState(() {
-      for (var tarefa in _toDoList) {
-        tarefa.concluida = true;
-      }
-    });
+  // Marcar todas as tarefas como concluídas
+  Future<void> _marcarTodasComoConcluidas() async {
+    if (userId == null) return;
 
-    if (_toDoList.isNotEmpty) {
-      final snackBar = SnackBar(
-          content: Text(
-              'Parabéns! Você concluiu todas as tarefas, sua saúde só melhora.'));
-      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    for (var tarefa in _toDoList) {
+      tarefa.concluida = true;
+
+      // Atualizar cada tarefa no Firestore
+      final querySnapshot = await _firestore
+          .collection('tarefas')
+          .doc(userId)
+          .collection('minhas_tarefas')
+          .where('tarefa', isEqualTo: tarefa.tarefa)
+          .limit(1)
+          .get();
+
+      if (querySnapshot.docs.isNotEmpty) {
+        final docId = querySnapshot.docs[0].id;
+        await _firestore
+            .collection('tarefas')
+            .doc(userId)
+            .collection('minhas_tarefas')
+            .doc(docId)
+            .update({'concluida': tarefa.concluida});
+      }
     }
+
+    setState(() {
+      final snackBar = SnackBar(content: Text('Todas as tarefas foram concluídas!'));
+      ScaffoldMessenger.of(context).showSnackBar(snackBar);
+    });
   }
 
   String _formatarTempoRestante(DateTime creationTime) {
@@ -153,8 +276,8 @@ class _Minhas_TarefasState extends State<Minhas_Tarefas> {
               ElevatedButton(
                 onPressed: _adicionarTarefa,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: Colors.teal,
-                  textStyle: TextStyle(fontSize: 16),
+                  backgroundColor: Colors.teal, // Cor do fundo do botão
+                  textStyle: TextStyle(fontSize: 16), // Estilo do texto
                 ),
                 child: Text('Adicionar Tarefa'),
               ),
