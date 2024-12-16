@@ -14,6 +14,15 @@ class _PerfilState extends State<Perfil> {
   final image_piker = ImagePicker();
   File? image_file;
 
+  // Lista de lembretes de saúde com estado para verificar se está marcado
+  final List<Map<String, dynamic>> lembretes = [
+    {"tarefa": "Beber 2L de água", "concluido": false},
+    {"tarefa": "Fazer alongamento", "concluido": false},
+    {"tarefa": "Comer algo saudável", "concluido": false},
+    {"tarefa": "Caminhar por 30 minutos", "concluido": false},
+    {"tarefa": "Descansar por 10 minutos", "concluido": false},
+  ];
+
   pick(ImageSource source) async {
     final pickedFile = await image_piker.pickImage(source: source);
 
@@ -52,6 +61,7 @@ class _PerfilState extends State<Perfil> {
       ),
       backgroundColor: Theme.of(context).colorScheme.background,
       body: ListView(
+        padding: EdgeInsets.symmetric(horizontal: 16.0), // Distância das bordas
         children: [
           Column(
             mainAxisAlignment: MainAxisAlignment.center,
@@ -102,30 +112,46 @@ class _PerfilState extends State<Perfil> {
                 ),
               ),
               SizedBox(height: 50),
+              // Lembretes de saúde com caixas de seleção
               Container(
-                width: 350.0,
-                height: 80.0,
+                padding: EdgeInsets.all(16.0),
                 decoration: BoxDecoration(
                   color: const Color(0xFF8F5FBF),
-                  borderRadius: BorderRadius.circular(40.0),
+                  borderRadius: BorderRadius.circular(10.0),
                 ),
-              ),
-              SizedBox(height: 20),
-              Container(
-                width: 350.0,
-                height: 80.0,
-                decoration: BoxDecoration(
-                  color: const Color(0xFF9FD3C7),
-                  borderRadius: BorderRadius.circular(40.0),
-                ),
-              ),
-              SizedBox(height: 20),
-              Container(
-                width: 350.0,
-                height: 80.0,
-                decoration: BoxDecoration(
-                  color: const Color(0xFFFF7A59),
-                  borderRadius: BorderRadius.circular(40.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      'Lembretes de Saúde',
+                      style: TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                    SizedBox(height: 10),
+                    ...lembretes.map((lembrete) {
+                      return CheckboxListTile(
+                        title: Text(
+                          lembrete["tarefa"],
+                          style: TextStyle(
+                            fontSize: 16,
+                            color: Colors.white,
+                          ),
+                        ),
+                        value: lembrete["concluido"],
+                        onChanged: (bool? value) {
+                          setState(() {
+                            lembrete["concluido"] = value!;
+                          });
+                        },
+                        activeColor: Color(0xFF1E2952),
+                        checkColor: Colors.white,
+                        controlAffinity: ListTileControlAffinity.leading,
+                      );
+                    }).toList(),
+                  ],
                 ),
               ),
             ],

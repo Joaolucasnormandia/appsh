@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:shared_preferences/shared_preferences.dart';  
+import 'package:cloud_firestore/cloud_firestore.dart'; // Firestore
+import 'package:firebase_auth/firebase_auth.dart'; // Firebase Authentication
 
 class DiarioFormPage extends StatefulWidget {
   final String dia;
-  final String? anotacaoExistente; 
+  final String? anotacaoExistente;
 
   DiarioFormPage({required this.dia, this.anotacaoExistente});
 
@@ -16,73 +17,112 @@ class _DiarioFormPageState extends State<DiarioFormPage> {
   final TextEditingController _atividadesController = TextEditingController();
   final TextEditingController _alimentacaoController = TextEditingController();
   final TextEditingController _notasController = TextEditingController();
-  final TextEditingController _aguaController = TextEditingController(); 
+  final TextEditingController _aguaController = TextEditingController();
+
+  final FirebaseFirestore _firestore = FirebaseFirestore.instance;
+  final User? _currentUser = FirebaseAuth.instance.currentUser;
 
   @override
   void initState() {
     super.initState();
-    _carregarDados(); 
+    _carregarDados();
   }
 
   void _carregarDados() async {
-    final prefs = await SharedPreferences.getInstance();
+    if (_currentUser == null) return;
 
-    setState(() {
-      _humorController.text = prefs.getString('humor_${widget.dia}') ?? '';
-      _atividadesController.text = prefs.getString('atividades_${widget.dia}') ?? '';
-      _alimentacaoController.text = prefs.getString('alimentacao_${widget.dia}') ?? '';
-      _notasController.text = prefs.getString('notas_${widget.dia}') ?? '';
-      _aguaController.text = prefs.getString('agua_${widget.dia}') ?? ''; 
-    });
+    try {
+      DocumentSnapshot<Map<String, dynamic>> doc = await _firestore
+          .collection('diarios')
+          .doc(_currentUser.uid)
+          .collection('dias')
+          .doc(widget.dia)
+          .get();
+
+      if (doc.exists && doc.data() != null) {
+        final data = doc.data()!;
+        setState(() {
+          _humorController.text = data['humor'] ?? '';
+          _atividadesController.text = data['atividades'] ?? '';
+          _alimentacaoController.text = data['alimentacao'] ?? '';
+          _notasController.text = data['notas'] ?? '';
+          _aguaController.text = data['agua']?.toString() ?? '';
+        });
+      }
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao carregar dados: $e')),
+      );
+    }
   }
 
- void _saveData() async {
-  if (_humorController.text.isEmpty ||
-      _atividadesController.text.isEmpty ||
-      _alimentacaoController.text.isEmpty ||
-      _aguaController.text.isEmpty) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Por favor, preencha todos os campos antes de salvar.')),
-    );
-    return; 
+  void _saveData() async {
+    if (_currentUser == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Usuário não autenticado.')),
+      );
+      return;
+    }
+
+    if (_humorController.text.isEmpty ||
+        _atividadesController.text.isEmpty ||
+        _alimentacaoController.text.isEmpty ||
+        _aguaController.text.isEmpty) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Por favor, preencha todos os campos antes de salvar.')),
+      );
+      return;
+    }
+
+    if (double.tryParse(_aguaController.text) == null) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Por favor, insira um valor válido para a quantidade de água.')),
+      );
+      return;
+    }
+
+    try {
+      await _firestore
+          .collection('diarios')
+          .doc(_currentUser.uid)
+          .collection('dias')
+          .doc(widget.dia)
+          .set({
+        'humor': _humorController.text,
+        'atividades': _atividadesController.text,
+        'alimentacao': _alimentacaoController.text,
+        'notas': _notasController.text,
+        'agua': double.parse(_aguaController.text),
+        'dataSalva': FieldValue.serverTimestamp(),
+      });
+
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Anotação salva!')),
+      );
+
+      Navigator.pop(context, true);
+    } catch (e) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Erro ao salvar dados: $e')),
+      );
+    }
   }
-
-  if (double.tryParse(_aguaController.text) == null) {
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(content: Text('Por favor, insira um valor válido para a quantidade de água.')),
-    );
-    return;
-  }
-
-  final prefs = await SharedPreferences.getInstance();
-  await prefs.setString('humor_${widget.dia}', _humorController.text);
-  await prefs.setString('atividades_${widget.dia}', _atividadesController.text);
-  await prefs.setString('alimentacao_${widget.dia}', _alimentacaoController.text);
-  await prefs.setString('notas_${widget.dia}', _notasController.text);
-  await prefs.setString('agua_${widget.dia}', _aguaController.text); 
-
-  ScaffoldMessenger.of(context).showSnackBar(
-    SnackBar(content: Text('Anotação salva!')),
-  );
-
-  Navigator.pop(context, true);
-}
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-  title: Text(
-    widget.dia,
-    style: TextStyle(
-      color: Colors.white, // Mudando a cor do título para branco
-    ),
-  ),
-  backgroundColor: const Color.fromARGB(255, 0, 0, 0),
-   iconTheme: IconThemeData(
-    color: Colors.white, // Mudando a cor da seta de voltar para branco
-  ),
-),
+        title: Text(
+          widget.dia,
+          style: TextStyle(
+            color: Colors.white,
+          ),
+        ),
+        backgroundColor: const Color.fromARGB(255, 0, 0, 0),
+        iconTheme: IconThemeData(
+          color: Colors.white,
+        ),
+      ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
@@ -139,7 +179,7 @@ class _DiarioFormPageState extends State<DiarioFormPage> {
               TextFormField(
                 controller: _aguaController,
                 decoration: InputDecoration(
-                  hintText: 'Informe a quantidade em Litros   ...',
+                  hintText: 'Informe a quantidade em Litros...',
                   border: OutlineInputBorder(borderRadius: BorderRadius.circular(10)),
                 ),
                 keyboardType: TextInputType.number,
@@ -168,13 +208,13 @@ class _DiarioFormPageState extends State<DiarioFormPage> {
                     ),
                     padding: EdgeInsets.symmetric(horizontal: 40, vertical: 15),
                   ),
-                   child: Text(
-                     'Salvar',
+                  child: Text(
+                    'Salvar',
                     style: TextStyle(
-                  color: Colors.white, // Mudando a cor do texto "Salvar" para branco
+                      color: Colors.white,
+                    ),
                   ),
-                   ),
-                  onPressed: _saveData, 
+                  onPressed: _saveData,
                 ),
               ),
             ],

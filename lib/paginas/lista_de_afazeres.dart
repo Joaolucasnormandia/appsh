@@ -228,7 +228,7 @@ class _Minhas_TarefasState extends State<Minhas_Tarefas> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: const Color.fromARGB(255, 237, 237, 237),
+        backgroundColor: Theme.of(context).colorScheme.background,
         title: Text('Minhas Tarefas'),
         leading: IconButton(
           icon: Icon(Icons.arrow_back),
@@ -257,7 +257,7 @@ class _Minhas_TarefasState extends State<Minhas_Tarefas> {
             end: Alignment.bottomCenter,
             colors: [
               const Color.fromARGB(255, 2, 167, 148),
-              Colors.white,
+              Theme.of(context).colorScheme.background,
             ],
           ),
         ),
